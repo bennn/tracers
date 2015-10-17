@@ -1,0 +1,16 @@
+diff --git a/racket/collects/racket/contract/private/guts.rkt b/racket/collects/racket/contract/private/guts.rkt
+index 417b8a7..470ae50 100644
+--- a/racket/collects/racket/contract/private/guts.rkt
++++ b/racket/collects/racket/contract/private/guts.rkt
+@@ -551,7 +551,10 @@
+      (λ (blame)
+        (λ (v neg-party)
+          (if (p? v)
+-             v
++             (begin
++              (when (and (list? neg-party) (eq? 'tracers:typed-contract (car neg-party)))
++                (printf "[TRACE:APPLY]\t~a\n" (cadr neg-party)))
++              v)
+              (raise-blame-error blame v #:missing-party neg-party
+                                 '(expected: "~s" given: "~e")
+                                 name 

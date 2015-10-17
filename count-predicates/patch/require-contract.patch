@@ -1,0 +1,35 @@
+diff --git a/racket/share/pkgs/typed-racket-lib/typed-racket/utils/require-contract.rkt b/racket/share/pkgs/typed-racket-lib/typed-racket/utils/require-contract.rkt
+index 05219db..c881c7b 100644
+--- a/racket/share/pkgs/typed-racket-lib/typed-racket/utils/require-contract.rkt
++++ b/racket/share/pkgs/typed-racket-lib/typed-racket/utils/require-contract.rkt
+@@ -52,14 +52,16 @@
+ 
+   (syntax-parse stx
+     [(require/contract nm:renameable hidden:id cnt lib)
++     (define tracers-message (format "~a\t~a\t~a\t~a" (unbox tracers:id-counter) (tracers-source->string (syntax-source #'lib)) (syntax-e #'nm) (syntax-e #'lib)))
++     (set-box! tracers:id-counter (add1 (unbox tracers:id-counter)))
+      #`(begin (require (only-in lib [nm.orig-nm nm.orig-nm-r]))
+               (rename-without-provide nm.nm hidden)
+-
++              (printf "[TRACE:CREATE]\t~a\n" #,tracers-message)
+               (define-ignored hidden
+                 (contract cnt
+                           #,(get-alternate #'nm.orig-nm-r)
+                           '(interface for #,(syntax->datum #'nm.nm))
+-                          (current-contract-region)
++                          (list 'tracers:typed-contract #,tracers-message (current-contract-region))
+                           (quote nm.nm)
+                           (quote-srcloc nm.nm))))]))
+ 
+@@ -70,3 +72,11 @@
+   (cond [(rename-transformer? v)
+          (get-alternate (rename-transformer-target v))]
+         [else id]))
++
++(define-for-syntax tracers:id-counter (box 0))
++(define-for-syntax (tracers-source->string src)
++  (cond
++   [(path-string? src)
++    (path->string (for/fold ([last #f] [p (explode-path src)]) p))]
++   [else
++    (error 'tracers:require-contract "Cannot parse filename from '~a'\n" src)]))
