@@ -4,6 +4,10 @@
 ;; - Print summary results to console
 ;; - (Optionally) given a `-o FILE.rktd` filename, save detailed result to file
 
+(provide
+  (struct-out boundary)
+)
+
 ;; -----------------------------------------------------------------------------
 
 (require
