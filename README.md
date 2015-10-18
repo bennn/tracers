@@ -11,6 +11,5 @@ The modulues in _p_ work together to compute some result; doing so, they pass va
 Some of these "roads" between modules might be very heavily used.
 
 Our goal is to identify high-traffic paths between modules.
-We hope these paths will explain performance characteristics and suggest optimizations (like tracing JIT).
-
+We hope these paths will explain performance characteristics and suggest optimizations.
 
