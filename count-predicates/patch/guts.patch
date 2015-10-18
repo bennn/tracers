@@ -8,7 +8,7 @@ index 417b8a7..470ae50 100644
           (if (p? v)
 -             v
 +             (begin
-+              (when (and (list? neg-party) (eq? 'tracers:typed-contract (car neg-party)))
++              (when (and (list? neg-party) (eq? 'tracers-typed-contract (car neg-party)))
 +                (printf "[TRACE:APPLY]\t~a\n" (cadr neg-party)))
 +              v)
               (raise-blame-error blame v #:missing-party neg-party

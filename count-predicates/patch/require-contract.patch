@@ -17,7 +17,7 @@ index 05219db..c881c7b 100644
                            #,(get-alternate #'nm.orig-nm-r)
                            '(interface for #,(syntax->datum #'nm.nm))
 -                          (current-contract-region)
-+                          (list 'tracers:typed-contract #,tracers-message (current-contract-region))
++                          (list 'tracers-typed-contract #,tracers-message (current-contract-region))
                            (quote nm.nm)
                            (quote-srcloc nm.nm))))]))
  
@@ -30,6 +30,6 @@ index 05219db..c881c7b 100644
 +(define-for-syntax (tracers-source->string src)
 +  (cond
 +   [(path-string? src)
-+    (path->string (for/fold ([last #f] [p (explode-path src)]) p))]
++    (path->string (for/fold ([last #f]) ([p (explode-path src)]) p))]
 +   [else
 +    (error 'tracers:require-contract "Cannot parse filename from '~a'\n" src)]))
